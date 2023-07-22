@@ -1,20 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
-
-import * as ExpoWebView from 'expo-web-view';
+import { WebView } from 'expo-web-view';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>{ExpoWebView.hello()}</Text>
-    </View>
-  );
+  return <WebView style={{ flex: 1, backgroundColor: 'purple' }} />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

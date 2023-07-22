@@ -1,11 +1,11 @@
+import { ViewProps } from 'react-native';
 import { requireNativeViewManager } from 'expo-modules-core';
 import * as React from 'react';
 
-import { ExpoWebViewProps } from './ExpoWebView.types';
+export type Props = ViewProps;
 
-const NativeView: React.ComponentType<ExpoWebViewProps> =
-  requireNativeViewManager('ExpoWebView');
+const NativeView: React.ComponentType<Props> = requireNativeViewManager('ExpoWebView');
 
-export default function ExpoWebView(props: ExpoWebViewProps) {
+export default function ExpoWebView(props: Props) {
   return <NativeView {...props} />;
 }
