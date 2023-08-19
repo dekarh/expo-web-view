@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "0328ed9a-b521-48ca-ae6f-1a8671c6c7c3"
+      }
+    },
+    "android": {
+      "package": "com.dekarh3.mywebview"
+    }
+  }
+}
