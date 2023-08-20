@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
-import WebView from 'react-native-webview';
+import { WebView } from "react-native-webview";
+import { readAsStringAsync } from "expo-file-system";
+import { useAssets } from "expo-asset";
+
 
 const selectProgrammingLanguage = () => {
   const languages = [
@@ -28,50 +31,24 @@ export default class App extends React.Component {
   }
 
   render() {
-    const handleClick = 
-    event => {
-      console.log(event.detail);
-      switch (event.detail) {
-        case 1: {
-          console.log('single click');
-          break;
-        }
-        case 2: {
-          console.log('double click');
-          break;
-        }
-        case 3: {
-          console.log('triple click');
-          break;
-        }
-        default: {
-          break;
-        }
-      }
-    };
-
-    const customHTML = `
-    <body style="display:flex; flex-direction: column;justify-content: center; 
-      align-items:center; background-color: black; color:white; height: 100%;">
-        <h1 style="font-size:100px; padding: 50px; text-align: center;" 
-        id="h1_element">
-          This is simple html
-        </h1>
-        <h2 style="display: block; font-size:80px; padding: 50px; 
-        text-align: center;" id="h2_element">
-          This text will be changed later!
-        </h2>
-        <div>
-          <button onClick={handleClick}>Double click</button>
-        </div>
-    </body>`;
+    const [index, indexLoadingError] = useAssets(
+      require("./stands/base/1.html")
+    );
+  
+    const [html, setHtml] = React.useState("");
+  
+    if (index) {
+      readAsStringAsync(index[0].localUri).then((data) => {
+          setHtml(data);
+      });
+    }
     
     const runFirst = `
       window.ReactNativeWebView.postMessage("страница обновилась");       
       const docs_h1 = document.getElementsByTagName("h1");
       for (let doc of docs_h1) {doc.innerHTML = "qwe";}
       const docs_p = document.getElementsByTagName("p");
-      for (let doc of docs_p) {doc.innerHTML = "ewq";}
+      for (let doc of docs_p) {doc.innerHTML = "ewq";};
       true; // примечание: это обязательно, иначе иногда будут возникать тихие сбои
     `;
 
@@ -112,21 +89,21 @@ export default class App extends React.Component {
         return null;
       }
     };
-  
+      
     setInterval(() => {
         this.webref.injectJavaScript(script()); // скрипт-иньекция исполняется раз в 2 сек
-      }, 2000);
+      }, 20000);
   
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <WebView 
-          source={{ html: customHTML }} 
-          ref={(r) => (this.webref = r)}
+          source={{ html }}
+          ref={(r) => (this.webref = r)}        // для скрипта-инъекции раз в 2 сек
           onMessage={(event) => {
           console.log(event.nativeEvent.data);
           }}
-          injectedJavaScript={runFirst}
-          injectedJavaScriptBeforeContentLoaded={runBeforeFirst}
+          injectedJavaScript={runFirst}                           // 
+          injectedJavaScriptBeforeContentLoaded={runBeforeFirst}  // 
         />
       </SafeAreaView>
     );
